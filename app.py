@@ -1,5 +1,5 @@
 import streamlit as st
-from datetime import datetime
+import datetime
 import requests
 
 st.title("🚖 Taxi Fare Predictor")
@@ -12,8 +12,15 @@ Welcome to our app🚕 !:)""")
 st.image('taxi.jpg')
 
 
-## Date and Time
-date_time = st.date_input("Select the date and time for the ride", value=datetime.now())
+now = datetime.datetime.now()
+
+# Get the date input
+date_time = st.date_input("📅 Select the date", value=now.date())
+
+# Get the time input
+time = st.time_input("⏰ Select the time", value=now.time())
+
+# Print the combined datetime object
 
 ## Pickup Location
 pickup_lon = st.number_input("Enter the pickup longitude", value=0.0, max_value=200.00)
@@ -25,6 +32,7 @@ dropoff_lat = st.number_input("Enter the dropoff latitude", min_value=0.0, max_v
 
 ## Passenger Count
 passenger_count = st.number_input("Enter the number of passengers", min_value=1, max_value=10)
+
 
 
 url = 'https://taxifare.lewagon.ai/predict'
@@ -45,7 +53,7 @@ def get_prediction(url, params):
 
 #2. Let's build a dictionary containing the parameters for our API...
 params = {
-    'pickup_datetime': date_time,
+    'pickup_datetime': f'{date_time} {time}',
     'pickup_longitude': pickup_lon,
     'pickup_latitude': pickup_lat,
     'dropoff_longitude': dropoff_lon,
